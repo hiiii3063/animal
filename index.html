@@ -5,368 +5,192 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MBTI로 동물의 숲 주민 찾기</title>
-
 <style>
 *{box-sizing:border-box}
-body{
-  margin:0;padding:24px 14px;
-  font-family:"Malgun Gothic",sans-serif;
-  background:#fff8e8;color:#51432e;text-align:center
-}
+body{margin:0;padding:24px 14px;font-family:"Malgun Gothic",sans-serif;background:#fff8e8;color:#51432e;text-align:center}
 .container{max-width:760px;margin:auto}
 header{padding:25px 10px}
-.tag{
-  display:inline-block;background:#ffe8a3;
-  padding:9px 17px;border-radius:30px;
-  color:#85631c;font-weight:bold
-}
+.tag{display:inline-block;background:#ffe8a3;padding:9px 17px;border-radius:30px;color:#85631c;font-weight:bold}
 h1{font-size:clamp(29px,6vw,42px);color:#725021;margin:20px 0 12px}
 .subtitle{font-size:17px;line-height:1.8;color:#8b795d}
-.panel{
-  background:white;border:2px solid #f4e4bb;
-  border-radius:25px;padding:24px;margin:18px 0;
-  box-shadow:0 8px 20px #8b6a2d0d
-}
+.panel{background:white;border:2px solid #f4e4bb;border-radius:25px;padding:24px;margin:18px 0;box-shadow:0 8px 20px #8b6a2d0d}
 .section-title{font-size:23px;color:#725021;margin:0 0 10px}
 .description{font-size:15px;color:#95846b;margin-bottom:22px}
-.grid{
-  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:10px
-}
-.mbti{
-  padding:15px 3px;border:2px solid #f0dfb5;
-  border-radius:14px;background:#fffaf0;color:#735c37;
-  font-size:17px;font-weight:bold;cursor:pointer;transition:.2s
-}
-.mbti:hover{background:#ffedb5;border-color:#e6bf5e;transform:translateY(-2px)}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.mbti{padding:15px 3px;border:2px solid #f0dfb5;border-radius:14px;background:#fffaf0;color:#735c37;font-size:17px;font-weight:bold;cursor:pointer}
+.mbti:hover{background:#ffedb5;border-color:#e6bf5e}
 button:focus-visible{outline:3px solid #b88728;outline-offset:3px}
 .result{display:none}
 .result.show{display:block;animation:appear .3s ease}
-@keyframes appear{
-  from{opacity:0;transform:translateY(8px)}
-  to{opacity:1;transform:translateY(0)}
-}
-.label{
-  display:inline-block;background:#fff0c2;color:#8a671f;
-  padding:8px 17px;border-radius:25px;font-weight:bold
-}
-.image-box{
-  margin:15px auto;width:min(100%,340px);height:290px;
-  display:flex;align-items:center;justify-content:center;
-  background:radial-gradient(ellipse,#fff0bd 0%,#fffaf0 70%);
-  border-radius:24px;overflow:hidden
-}
+@keyframes appear{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.label{display:inline-block;background:#fff0c2;color:#8a671f;padding:8px 17px;border-radius:25px;font-weight:bold}
+.image-box{margin:15px auto;width:min(100%,340px);height:290px;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse,#fff0bd 0%,#fffaf0 70%);border-radius:24px;overflow:hidden}
 .character-image{width:100%;height:100%;object-fit:contain}
 .image-error{display:none;color:#8b795d;padding:20px;line-height:1.8}
+.image-error a{color:#85631c}
 .character-name{font-size:34px;color:#725021;margin:8px 0}
 .character-info{color:#9b7c3d;font-size:15px;margin-bottom:20px}
-.reason{
-  background:#fff9e9;border-radius:17px;padding:20px;
-  text-align:left;font-size:17px;line-height:1.9
-}
+.reason{background:#fff9e9;border-radius:17px;padding:20px;text-align:left;font-size:17px;line-height:1.9}
 .reason h3,.compatibility h3{margin:0 0 10px;font-size:19px;color:#806023}
 .reason p{margin:7px 0}
-.compatibility{
-  margin-top:18px;background:#fff0d9;border-radius:18px;padding:20px
-}
+.compatibility{margin-top:18px;background:#fff0d9;border-radius:18px;padding:20px}
 .match{font-size:27px;font-weight:bold;color:#725021;margin:10px 0}
 .compatibility p{font-size:15px;line-height:1.8;margin-bottom:0}
-.action{
-  margin-top:22px;padding:15px 28px;border:0;border-radius:14px;
-  background:#e8b94e;color:#543b12;font-size:17px;
-  font-weight:bold;cursor:pointer
-}
+.action{margin-top:22px;padding:15px 28px;border:0;border-radius:14px;background:#e8b94e;color:#543b12;font-size:17px;font-weight:bold;cursor:pointer}
 .action:hover{background:#f0ca70}
 footer{padding:24px 5px;color:#a29276;font-size:13px;line-height:1.8}
-@media(max-width:480px){
-  .panel{padding:19px 13px}
-  .grid{gap:8px}
-  .mbti{font-size:15px;padding:14px 2px}
-  .image-box{height:250px}
-  .reason{font-size:16px;padding:16px}
-}
+@media(max-width:480px){.panel{padding:19px 13px}.grid{gap:8px}.mbti{font-size:15px;padding:14px 2px}.image-box{height:250px}.reason{font-size:16px;padding:16px}}
 </style>
 </head>
-
 <body>
 <main class="container">
-
 <header>
-  <div class="tag">ANIMAL CROSSING × MBTI</div>
-  <h1>나와 닮은 동물의 숲 주민은?</h1>
-  <p class="subtitle">
-    나의 MBTI를 선택하고<br>
-    나와 어울리는 동물의 숲 주민을 찾아보세요!
-  </p>
+<div class="tag">ANIMAL CROSSING × MBTI</div>
+<h1>나와 닮은 동물의 숲 주민은?</h1>
+<p class="subtitle">나의 MBTI를 선택하고<br>어울리는 주민을 찾아보세요!</p>
 </header>
 
 <section class="panel" id="selection">
-  <h2 class="section-title">나의 MBTI 선택하기</h2>
-  <p class="description">16가지 유형 중 하나를 눌러주세요.</p>
-  <div class="grid" id="grid"></div>
+<h2 class="section-title">나의 MBTI 선택하기</h2>
+<p class="description">16가지 유형 중 하나를 눌러주세요.</p>
+<div class="grid" id="grid"></div>
 </section>
 
 <section class="panel result" id="result" aria-live="polite">
-  <div class="label" id="selected"></div>
-
-  <div class="image-box">
-    <img class="character-image" id="characterImage"
-         alt="추천 동물의 숲 캐릭터 이미지">
-    <p class="image-error" id="imageError">
-      이미지를 불러오지 못했어요.<br>
-      인터넷 연결을 확인한 뒤 다시 선택해주세요.
-    </p>
-  </div>
-
-  <h2 class="character-name" id="characterName"></h2>
-  <div class="character-info" id="characterInfo"></div>
-
-  <div class="reason">
-    <h3>이 주민을 추천하는 이유</h3>
-    <div id="reasonText"></div>
-  </div>
-
-  <div class="compatibility">
-    <h3>나와 잘 맞는 MBTI</h3>
-    <div class="match" id="match"></div>
-    <p id="matchReason"></p>
-  </div>
-
-  <button class="action" id="retry">다시 고르기</button>
+<div class="label" id="selected"></div>
+<div class="image-box">
+<img class="character-image" id="characterImage" alt="추천 동물의 숲 캐릭터">
+<div class="image-error" id="imageError">
+이미지를 불러오지 못했어요.<br>
+아래 링크에서 이미지를 직접 확인할 수 있어요.<br>
+<a id="imageLink" href="#" target="_blank" rel="noopener">캐릭터 이미지 열기</a>
+</div>
+</div>
+<h2 class="character-name" id="characterName"></h2>
+<div class="character-info" id="characterInfo"></div>
+<div class="reason">
+<h3>이 주민을 추천하는 이유</h3>
+<div id="reasonText"></div>
+</div>
+<div class="compatibility">
+<h3>나와 잘 맞는 MBTI</h3>
+<div class="match" id="match"></div>
+<p id="matchReason"></p>
+</div>
+<button class="action" id="retry">↩ 다시 고르기</button>
 </section>
 
 <footer>
-  캐릭터 이미지와 이름은 해당 게임의 관련 자료를 바탕으로 합니다.<br>
-  MBTI별 캐릭터 추천과 궁합은 재미를 위한 창작 설정입니다.
+캐릭터 이미지는 외부 이미지 사이트에서 불러옵니다.<br>
+MBTI별 캐릭터 추천과 궁합은 재미를 위한 창작 설정입니다.
 </footer>
-
 </main>
 
 <script>
-const data = {
- ISTJ:{
-  name:"여울",en:"Isabelle",kind:"안내원",
-  image:"https://dodo.ac/np/images/8/87/Isabelle_NH.png",
-  reason:[
-   "마을의 일을 꼼꼼하게 관리하고 맡은 업무를 책임감 있게 처리하는 모습이 ISTJ와 닮았어요.",
-   "규칙과 질서를 중요하게 여기면서 주민들을 위해 꾸준히 노력하는 점이 잘 어울려요."
-  ],
-  match:"ESFP",
-  matchReason:"계획적이고 신중한 ISTJ와 밝고 활기찬 ESFP는 서로에게 새로운 경험과 안정감을 줄 수 있어요."
- },
- ISFJ:{
-  name:"부옥",en:"Celeste",kind:"부엉이 연구자",
-  image:"https://dodo.ac/np/images/8/87/Celeste_NH.png",
-  reason:[
-   "별과 천체에 관심을 갖고 차분하게 지식을 나누는 모습이 ISFJ의 세심함과 닮았어요.",
-   "다른 사람에게 도움이 되는 정보를 알려 주는 따뜻한 이미지가 잘 어울려요."
-  ],
-  match:"ESFP",
-  matchReason:"배려심 깊은 ISFJ와 표현력이 풍부한 ESFP는 서로의 장점을 발견하며 즐거운 시간을 보낼 수 있어요."
- },
- INFJ:{
-  name:"마스터",en:"Brewster",kind:"비둘기 카페 주인",
-  image:"https://dodo.ac/np/images/0/0b/Brewster_NH.png",
-  reason:[
-   "말수가 많지는 않지만 자신만의 원칙과 분위기를 지키는 모습이 INFJ와 닮았어요.",
-   "조용하고 편안한 공간에서 사람들에게 휴식을 제공하는 이미지가 잘 어울려요."
-  ],
-  match:"ENFP",
-  matchReason:"깊이 생각하는 INFJ와 호기심이 많은 ENFP는 서로의 생각과 관심사를 넓혀 갈 수 있어요."
- },
- INTJ:{
-  name:"여울",en:"Isabelle",kind:"안내원",
-  image:"https://dodo.ac/np/images/8/87/Isabelle_NH.png",
-  reason:[
-   "마을의 일정을 관리하고 여러 업무를 체계적으로 처리하는 모습이 INTJ의 계획성과 닮았어요.",
-   "목표를 정하고 효율적으로 일을 진행하려는 이미지가 잘 어울려요."
-  ],
-  match:"ENTP",
-  matchReason:"전략을 세우는 INTJ와 새로운 가능성을 탐색하는 ENTP는 아이디어를 구체화하는 데 서로 도움을 줄 수 있어요."
- },
- ISTP:{
-  name:"너굴",en:"Tom Nook",kind:"상점 주인",
-  image:"https://dodo.ac/np/images/8/8c/Tom_Nook_NH.png",
-  reason:[
-   "섬에서 필요한 시설과 주거 환경을 마련하고 실질적인 문제를 해결하는 모습이 ISTP와 닮았어요.",
-   "현실적인 판단과 실행을 중시하는 이미지가 잘 어울려요."
-  ],
-  match:"ESTJ",
-  matchReason:"실용적으로 문제를 해결하는 ISTP와 체계적으로 일을 추진하는 ESTJ는 공동의 목표를 이루는 데 강점을 발휘할 수 있어요."
- },
- ISFP:{
-  name:"쭈니",en:"Marshal",kind:"다람쥐 주민",
-  image:"https://dodo.ac/np/images/4/4b/Marshal_NH.png",
-  reason:[
-   "자신만의 취향과 분위기를 지닌 쭈니는 개성을 중요하게 여기는 ISFP와 닮았어요.",
-   "자기만의 방식으로 생활하면서 주변과 관계를 맺는 점이 잘 어울려요."
-  ],
-  match:"ENFJ",
-  matchReason:"자신의 감성과 취향을 중시하는 ISFP와 사람들을 격려하는 ENFJ는 서로를 응원할 수 있어요."
- },
- INFP:{
-  name:"릴리",en:"Lily",kind:"개구리 주민",
-  image:"https://dodo.ac/np/images/a/a1/Lily_NH.png",
-  reason:[
-   "부드럽고 다정한 인상을 지닌 릴리는 감수성과 공감 능력을 중요하게 여기는 INFP와 닮았어요.",
-   "평화롭고 따뜻한 분위기를 만들어 가는 모습이 잘 어울려요."
-  ],
-  match:"ENFJ",
-  matchReason:"자신의 가치와 감정을 소중히 여기는 INFP와 타인을 격려하는 ENFJ는 서로를 이해하고 성장할 수 있어요."
- },
- INTP:{
-  name:"부옥",en:"Celeste",kind:"부엉이 연구자",
-  image:"https://dodo.ac/np/images/8/87/Celeste_NH.png",
-  reason:[
-   "별자리와 천체에 호기심을 갖고 새로운 지식을 탐구하는 모습이 INTP와 닮았어요.",
-   "관찰과 탐구를 즐기는 차분한 이미지가 잘 어울려요."
-  ],
-  match:"ENTJ",
-  matchReason:"깊이 분석하는 INTP와 아이디어를 실행하는 ENTJ는 탐구와 실천을 결합할 수 있어요."
- },
- ESTP:{
-  name:"갑돌",en:"Kapp'n",kind:"거북이 뱃사공",
-  image:"https://dodo.ac/np/images/3/34/Kapp%27n_NH.png",
-  reason:[
-   "배를 타고 새로운 섬으로 떠나는 활동적인 모습이 ESTP의 모험심과 닮았어요.",
-   "직접 경험하고 새로운 환경을 탐색하는 성향이 잘 어울려요."
-  ],
-  match:"ISFJ",
-  matchReason:"모험을 즐기는 ESTP와 세심한 ISFJ는 서로에게 새로운 경험과 안정감을 제공할 수 있어요."
- },
- ESFP:{
-  name:"운동광 주민",en:"Dom",kind:"양 주민",
-  image:"https://dodo.ac/np/images/6/60/Dom_NH.png",
-  reason:[
-   "운동과 활동을 즐기고 밝은 에너지를 보여 주는 모습이 ESFP와 닮았어요.",
-   "주변 사람들과 활기찬 분위기를 나누는 점이 잘 어울려요."
-  ],
-  match:"ISTJ",
-  matchReason:"활기찬 ESFP와 계획적인 ISTJ는 서로에게 즐거움과 안정감을 줄 수 있어요."
- },
- ENFP:{
-  name:"미애",en:"Merry",kind:"고양이 주민",
-  image:"https://dodo.ac/np/images/2/2b/Merry_NH.png",
-  reason:[
-   "밝고 친근한 분위기와 다양한 표현이 ENFP의 활발한 성격과 닮았어요.",
-   "새로운 사람들과 어울리며 즐거움을 나누는 모습이 잘 어울려요."
-  ],
-  match:"INFJ",
-  matchReason:"새로운 가능성을 즐기는 ENFP와 깊이 생각하는 INFJ는 서로의 관점을 넓힐 수 있어요."
- },
- ENTP:{
-  name:"잭슨",en:"Raymond",kind:"고양이 주민",
-  image:"https://dodo.ac/np/images/0/02/Raymond_NH.png",
-  reason:[
-   "자신만의 취향과 독특한 분위기를 지닌 잭슨은 새로운 관점을 탐색하는 ENTP와 닮았어요.",
-   "고정된 방식보다 다양한 가능성을 생각하는 이미지가 잘 어울려요."
-  ],
-  match:"INTJ",
-  matchReason:"새로운 아이디어를 제안하는 ENTP와 전략적인 INTJ는 생각을 발전시키고 구체화할 수 있어요."
- },
- ESTJ:{
-  name:"너굴",en:"Tom Nook",kind:"상점 주인",
-  image:"https://dodo.ac/np/images/8/8c/Tom_Nook_NH.png",
-  reason:[
-   "섬의 주거와 시설을 관리하고 사업을 운영하는 모습이 ESTJ의 조직력과 닮았어요.",
-   "계획을 실제 행동으로 옮기는 추진력이 잘 어울려요."
-  ],
-  match:"ISTP",
-  matchReason:"체계적으로 일을 추진하는 ESTJ와 실용적인 해결책을 찾는 ISTP는 서로의 강점을 활용할 수 있어요."
- },
- ESFJ:{
-  name:"콩돌이",en:"Timmy",kind:"너굴상점 직원",
-  image:"https://dodo.ac/np/images/1/13/Timmy_NH.png",
-  reason:[
-   "상점에서 손님을 맞이하고 필요한 물건을 판매하는 모습이 ESFJ의 친화력과 닮았어요.",
-   "주변 사람들과 원만하게 어울리려는 이미지가 잘 어울려요."
-  ],
-  match:"ISFP",
-  matchReason:"사람들과 조화를 이루려는 ESFJ와 감수성이 풍부한 ISFP는 편안한 관계를 만들어 갈 수 있어요."
- },
- ENFJ:{
-  name:"여울",en:"Isabelle",kind:"안내원",
-  image:"https://dodo.ac/np/images/8/87/Isabelle_NH.png",
-  reason:[
-   "주민들을 돕고 마을의 여러 활동을 지원하는 모습이 ENFJ의 배려와 리더십을 닮았어요.",
-   "공동체를 위해 노력하고 긍정적인 분위기를 만드는 점이 잘 어울려요."
-  ],
-  match:"INFP",
-  matchReason:"다른 사람을 이끄는 ENFJ와 자신만의 가치를 중요하게 여기는 INFP는 서로를 격려하며 성장할 수 있어요."
- },
- ENTJ:{
-  name:"너굴",en:"Tom Nook",kind:"상점 주인",
-  image:"https://dodo.ac/np/images/8/8c/Tom_Nook_NH.png",
-  reason:[
-   "사업을 운영하고 섬의 발전을 추진하는 모습이 ENTJ의 목표 지향적인 성향과 닮았어요.",
-   "큰 계획을 세우고 실행으로 옮기는 추진력이 잘 어울려요."
-  ],
-  match:"INTP",
-  matchReason:"목표를 추진하는 ENTJ와 논리적으로 분석하는 INTP는 계획과 분석을 결합할 수 있어요."
- }
+const data={
+ISTJ:{name:"여울",en:"Isabelle",kind:"안내원",path:"9/95/Isabelle_NH.png",reason:["마을의 일을 꼼꼼하게 관리하고 맡은 업무를 책임감 있게 처리하는 모습이 ISTJ와 닮았어요.","규칙과 질서를 중요하게 여기면서 주민들을 위해 꾸준히 노력하는 점이 잘 어울려요."],match:"ESFP",matchReason:"계획적이고 신중한 ISTJ와 밝고 활기찬 ESFP는 서로에게 새로운 경험과 안정감을 줄 수 있어요."},
+ISFJ:{name:"부옥",en:"Celeste",kind:"부엉이 연구자",path:"8/87/Celeste_NH.png",reason:["별과 천체에 관심을 갖고 차분하게 지식을 나누는 모습이 ISFJ의 세심함과 닮았어요.","다른 사람에게 도움이 되는 정보를 알려 주는 따뜻한 이미지가 잘 어울려요."],match:"ESFP",matchReason:"배려심 깊은 ISFJ와 밝은 ESFP는 함께 즐거운 분위기를 만들 수 있어요."},
+INFJ:{name:"마스터",en:"Brewster",kind:"카페 주인",path:"0/0b/Brewster_NH.png",reason:["말수가 많지는 않지만 자신만의 원칙과 분위기를 지키는 모습이 INFJ와 닮았어요.","조용하고 편안한 공간에서 사람들에게 휴식을 제공하는 이미지가 잘 어울려요."],match:"ENFP",matchReason:"깊이 생각하는 INFJ와 호기심 많은 ENFP는 서로의 생각을 넓혀 갈 수 있어요."},
+INTJ:{name:"여울",en:"Isabelle",kind:"안내원",path:"9/95/Isabelle_NH.png",reason:["마을의 일정을 관리하고 여러 업무를 체계적으로 처리하는 모습이 INTJ의 계획성과 닮았어요.","목표를 정하고 효율적으로 일을 진행하려는 이미지가 잘 어울려요."],match:"ENTP",matchReason:"전략을 세우는 INTJ와 새로운 가능성을 탐색하는 ENTP는 아이디어를 구체화할 수 있어요."},
+ISTP:{name:"너굴",en:"Tom Nook",kind:"상점 주인",path:"8/8c/Tom_Nook_NH.png",reason:["섬에서 필요한 시설과 주거 환경을 마련하고 실질적인 문제를 해결하는 모습이 ISTP와 닮았어요.","현실적인 판단과 실행을 중시하는 이미지가 잘 어울려요."],match:"ESTJ",matchReason:"실용적으로 문제를 해결하는 ISTP와 체계적인 ESTJ는 공동의 목표를 이루는 데 강점을 발휘할 수 있어요."},
+ISFP:{name:"쭈니",en:"Marshal",kind:"다람쥐 주민",path:"4/4b/Marshal_NH.png",reason:["자신만의 취향과 분위기를 지닌 쭈니는 개성을 중요하게 여기는 ISFP와 닮았어요.","자기만의 방식으로 생활하면서 주변과 관계를 맺는 점이 잘 어울려요."],match:"ENFJ",matchReason:"자신의 감성과 취향을 중시하는 ISFP와 사람들을 격려하는 ENFJ는 서로를 응원할 수 있어요."},
+INFP:{name:"릴리",en:"Lily",kind:"개구리 주민",path:"a/a1/Lily_NH.png",reason:["부드럽고 다정한 인상을 지닌 릴리는 감수성과 공감 능력을 중요하게 여기는 INFP와 닮았어요.","평화롭고 따뜻한 분위기를 만들어 가는 모습이 잘 어울려요."],match:"ENFJ",matchReason:"자신의 가치와 감정을 소중히 여기는 INFP와 타인을 격려하는 ENFJ는 서로를 이해하고 성장할 수 있어요."},
+INTP:{name:"부옥",en:"Celeste",kind:"부엉이 연구자",path:"8/87/Celeste_NH.png",reason:["별자리와 천체에 호기심을 갖고 새로운 지식을 탐구하는 모습이 INTP와 닮았어요.","관찰과 탐구를 즐기는 차분한 이미지가 잘 어울려요."],match:"ENTJ",matchReason:"깊이 분석하는 INTP와 아이디어를 실행하는 ENTJ는 탐구와 실천을 결합할 수 있어요."},
+ESTP:{name:"갑돌",en:"Kapp'n",kind:"거북이 뱃사공",path:"3/34/Kapp%27n_NH.png",reason:["배를 타고 새로운 섬으로 떠나는 활동적인 모습이 ESTP의 모험심과 닮았어요.","직접 경험하고 새로운 환경을 탐색하는 성향이 잘 어울려요."],match:"ISFJ",matchReason:"모험을 즐기는 ESTP와 세심한 ISFJ는 서로에게 새로운 경험과 안정감을 제공할 수 있어요."},
+ESFP:{name:"운동광 주민",en:"Dom",kind:"양 주민",path:"6/60/Dom_NH.png",reason:["운동과 활동을 즐기고 밝은 에너지를 보여 주는 모습이 ESFP와 닮았어요.","주변 사람들과 활기찬 분위기를 나누는 점이 잘 어울려요."],match:"ISTJ",matchReason:"활기찬 ESFP와 계획적인 ISTJ는 서로에게 즐거움과 안정감을 줄 수 있어요."},
+ENFP:{name:"미애",en:"Merry",kind:"고양이 주민",path:"2/2b/Merry_NH.png",reason:["밝고 친근한 분위기와 다양한 표현이 ENFP의 활발한 성격과 닮았어요.","새로운 사람들과 어울리며 즐거움을 나누는 모습이 잘 어울려요."],match:"INFJ",matchReason:"새로운 가능성을 즐기는 ENFP와 깊이 생각하는 INFJ는 서로의 관점을 넓힐 수 있어요."},
+ENTP:{name:"잭슨",en:"Raymond",kind:"고양이 주민",path:"0/02/Raymond_NH.png",reason:["자신만의 취향과 독특한 분위기를 지닌 잭슨은 새로운 관점을 탐색하는 ENTP와 닮았어요.","고정된 방식보다 다양한 가능성을 생각하는 이미지가 잘 어울려요."],match:"INTJ",matchReason:"새로운 아이디어를 제안하는 ENTP와 전략적인 INTJ는 생각을 발전시키고 구체화할 수 있어요."},
+ESTJ:{name:"너굴",en:"Tom Nook",kind:"상점 주인",path:"8/8c/Tom_Nook_NH.png",reason:["섬의 주거와 시설을 관리하고 사업을 운영하는 모습이 ESTJ의 조직력과 닮았어요.","계획을 실제 행동으로 옮기는 추진력이 잘 어울려요."],match:"ISTP",matchReason:"체계적으로 일을 추진하는 ESTJ와 실용적인 ISTP는 서로의 강점을 활용할 수 있어요."},
+ESFJ:{name:"콩돌이",en:"Timmy",kind:"너굴상점 직원",path:"1/13/Timmy_NH.png",reason:["상점에서 손님을 맞이하고 필요한 물건을 판매하는 모습이 ESFJ의 친화력과 닮았어요.","주변 사람들과 원만하게 어울리려는 이미지가 잘 어울려요."],match:"ISFP",matchReason:"사람들과 조화를 이루려는 ESFJ와 감수성이 풍부한 ISFP는 편안한 관계를 만들어 갈 수 있어요."},
+ENFJ:{name:"여울",en:"Isabelle",kind:"안내원",path:"9/95/Isabelle_NH.png",reason:["주민들을 돕고 마을의 여러 활동을 지원하는 모습이 ENFJ의 배려와 리더십을 닮았어요.","공동체를 위해 노력하고 긍정적인 분위기를 만드는 점이 잘 어울려요."],match:"INFP",matchReason:"다른 사람을 이끄는 ENFJ와 자신만의 가치를 중요하게 여기는 INFP는 서로를 격려하며 성장할 수 있어요."},
+ENTJ:{name:"너굴",en:"Tom Nook",kind:"상점 주인",path:"8/8c/Tom_Nook_NH.png",reason:["사업을 운영하고 섬의 발전을 추진하는 모습이 ENTJ의 목표 지향적인 성향과 닮았어요.","큰 계획을 세우고 실행으로 옮기는 추진력이 잘 어울려요."],match:"INTP",matchReason:"목표를 추진하는 ENTJ와 논리적으로 분석하는 INTP는 계획과 분석을 결합할 수 있어요."}
 };
-
-const types=[
- "ISTJ","ISFJ","INFJ","INTJ",
- "ISTP","ISFP","INFP","INTP",
- "ESTP","ESFP","ENFP","ENTP",
- "ESTJ","ESFJ","ENFJ","ENTJ"
-];
 
 const grid=document.getElementById("grid");
 const selection=document.getElementById("selection");
 const result=document.getElementById("result");
 const img=document.getElementById("characterImage");
 const error=document.getElementById("imageError");
+const base="https://dodo.ac/np/images/";
+let loadToken=0;
 
-types.forEach(type=>{
-  const button=document.createElement("button");
-  button.type="button";
-  button.className="mbti";
-  button.textContent=type;
-  button.addEventListener("click",()=>showResult(type));
-  grid.appendChild(button);
+[
+"ISTJ","ISFJ","INFJ","INTJ",
+"ISTP","ISFP","INFP","INTP",
+"ESTP","ESFP","ENFP","ENTP",
+"ESTJ","ESFJ","ENFJ","ENTJ"
+].forEach(type=>{
+ const button=document.createElement("button");
+ button.type="button";
+ button.className="mbti";
+ button.textContent=type;
+ button.addEventListener("click",()=>showResult(type));
+ grid.appendChild(button);
 });
 
 function showResult(type){
-  const p=data[type];
+ const p=data[type];
+ const token=++loadToken;
 
-  document.getElementById("selected").textContent="나의 MBTI: "+type;
-  document.getElementById("characterName").textContent=p.name;
-  document.getElementById("characterInfo").textContent=
-    p.en+" · "+p.kind;
+ document.getElementById("selected").textContent="나의 MBTI: "+type;
+ document.getElementById("characterName").textContent=p.name;
+ document.getElementById("characterInfo").textContent=p.en+" · "+p.kind;
 
-  img.style.display="block";
-  error.style.display="none";
-  img.alt=p.name+" 캐릭터 이미지";
-  img.src=p.image;
+ img.style.display="block";
+ error.style.display="none";
+ img.alt=p.name+" 캐릭터 이미지";
 
-  img.onerror=function(){
-    img.style.display="none";
-    error.style.display="block";
-  };
+ const direct=base+p.path;
+ const parts=p.path.split("/");
+ const filename=parts[parts.length-1];
+ const thumbnail=base+"thumb/"+p.path+"/300px-"+filename;
 
-  const reasons=document.getElementById("reasonText");
-  reasons.replaceChildren();
+ // 원본 이미지가 실패하면 썸네일 주소로 다시 시도
+ img.onerror=function(){
+   if(token!==loadToken)return;
 
-  p.reason.forEach(text=>{
-    const para=document.createElement("p");
-    para.textContent="• "+text;
-    reasons.appendChild(para);
-  });
+   if(img.dataset.triedThumbnail!=="yes"){
+     img.dataset.triedThumbnail="yes";
+     img.src=thumbnail;
+   }else{
+     img.style.display="none";
+     error.style.display="block";
+     document.getElementById("imageLink").href=direct;
+   }
+ };
 
-  document.getElementById("match").textContent=p.match;
-  document.getElementById("matchReason").textContent=p.matchReason;
+ img.onload=function(){
+   if(token===loadToken){
+     img.dataset.triedThumbnail="no";
+   }
+ };
 
-  selection.style.display="none";
-  result.classList.add("show");
-  window.scrollTo({top:0,behavior:"smooth"});
+ img.dataset.triedThumbnail="no";
+ img.src=direct;
+
+ const reasons=document.getElementById("reasonText");
+ reasons.replaceChildren();
+
+ p.reason.forEach(text=>{
+   const para=document.createElement("p");
+   para.textContent="• "+text;
+   reasons.appendChild(para);
+ });
+
+ document.getElementById("match").textContent=p.match;
+ document.getElementById("matchReason").textContent=p.matchReason;
+
+ selection.style.display="none";
+ result.classList.add("show");
+ window.scrollTo({top:0,behavior:"smooth"});
 }
 
 document.getElementById("retry").addEventListener("click",()=>{
-  result.classList.remove("show");
-  selection.style.display="block";
-  window.scrollTo({top:0,behavior:"smooth"});
+ loadToken++;
+ result.classList.remove("show");
+ selection.style.display="block";
+ img.removeAttribute("src");
+ window.scrollTo({top:0,behavior:"smooth"});
 });
 </script>
 </body>
